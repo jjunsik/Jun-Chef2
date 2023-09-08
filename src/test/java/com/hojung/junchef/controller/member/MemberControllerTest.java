@@ -39,8 +39,7 @@ class MemberControllerTest {
     private WebApplicationContext wac;
 
     static final long MEMBER_ID = 1L;
-
-    Member member;
+    static final String BASE_MEMBER_URL = "/jun-chef/v1/members";
 
     @BeforeEach
     void setUp() {
@@ -64,7 +63,7 @@ class MemberControllerTest {
 
         // when & then
         // andExpect(): 기대하는 값이 나왔는지 체크해볼 수 있는 메소드
-        mockMvc.perform(MockMvcRequestBuilders.get("/jun-chef/v1/members/{MEMBER_ID}", MEMBER_ID))
+        mockMvc.perform(MockMvcRequestBuilders.get(BASE_MEMBER_URL + "/{MEMBER_ID}", MEMBER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").exists())
                 .andExpect(jsonPath("$.email").exists());
@@ -99,7 +98,7 @@ class MemberControllerTest {
 
         // when & then
         // andExpect(content().string(containsString(""))): 리턴 받은 Body 에 ""문자열이 존재하는지 확인
-        mockMvc.perform(MockMvcRequestBuilders.get("/jun-chef/v1/members"))
+        mockMvc.perform(MockMvcRequestBuilders.get(BASE_MEMBER_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(member1.getEmail())))
                 .andExpect(content().string(containsString(member2.getEmail())))
@@ -125,9 +124,9 @@ class MemberControllerTest {
 //        given(memberService.join()member1).willReturn(this.memberId);
 
         // when & then
-        mockMvc.perform(MockMvcRequestBuilders.post("/jun-chef/v1/members")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(Objects.requireNonNull(content)))
+        mockMvc.perform(MockMvcRequestBuilders.post(BASE_MEMBER_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(Objects.requireNonNull(content)))
                 .andExpect(status().isOk());
 
 //        verify(memberService).join(any(Member.class));
@@ -138,15 +137,16 @@ class MemberControllerTest {
     @Test
     void changePassword() throws Exception {
         // given
-        ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest("newPasswd");
+        String newPasswd = "newPasswd";
+        ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest(newPasswd);
 
         Gson gson = new Gson();
         String content = gson.toJson(changePasswordRequest);
 
         // when & then
-        mockMvc.perform(MockMvcRequestBuilders.put("/jun-chef/v1/members/{MEMBER_ID}", MEMBER_ID)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(content))
+        mockMvc.perform(MockMvcRequestBuilders.put(BASE_MEMBER_URL + "/{MEMBER_ID}", MEMBER_ID)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content))
                 .andExpect(status().isOk());
     }
 
@@ -158,7 +158,7 @@ class MemberControllerTest {
         String content = gson.toJson(MEMBER_ID);
 
         // when & then
-        mockMvc.perform(MockMvcRequestBuilders.delete("/jun-chef/v1/members/{MEMBER_ID}", MEMBER_ID)
+        mockMvc.perform(MockMvcRequestBuilders.delete(BASE_MEMBER_URL + "/{MEMBER_ID}", MEMBER_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andExpect(status().isOk());
@@ -175,7 +175,7 @@ class MemberControllerTest {
         String content = gson.toJson(loginRequest);
 
         // when & then
-        mockMvc.perform(MockMvcRequestBuilders.post("/jun-chef/v1/members/" + "login")
+        mockMvc.perform(MockMvcRequestBuilders.post(BASE_MEMBER_URL + "/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andExpect(status().isOk());

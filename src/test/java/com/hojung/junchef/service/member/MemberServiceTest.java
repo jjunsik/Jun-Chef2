@@ -2,14 +2,11 @@ package com.hojung.junchef.service.member;
 
 import com.hojung.junchef.domain.member.Member;
 import com.hojung.junchef.repository.member.MemberRepository;
-import com.hojung.junchef.repository.member.MemberRepositoryImpl;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -43,22 +40,25 @@ class MemberServiceTest {
     @Test
     void join() {
         // when
-        Long memberId = memberService.join(this.member);
+        Member member1 = getMember(1);
+        Long memberId = memberService.join(member1);
 
         // then
-        assertThat(this.member.getId()).isEqualTo(memberId);
+        assertThat(member1.getId()).isEqualTo(memberId);
     }
 
     @DisplayName("이미 존재하는 이메일로 회원 가입을 할 경우, IllegalStateException 을 throw")
     @Test
     void joinExistEmail() {
         // given
+        Member member1 = getMember(1);
+
         Member duplicateMember = Member.builder()
                 .name("duplicateMember")
-                .email("test1@test.com")
+                .email(member1.getEmail())
                 .passwd("test1").build();
 
-        memberService.join(this.member);
+        memberService.join(member1);
 
         // 예상한 Exception 인지 검증하는 방법
 
@@ -103,13 +103,11 @@ class MemberServiceTest {
     @Test
     void findAll() {
         // given
-        Member member1 = Member.builder()
-                .name("test2")
-                .email("test2@test.com")
-                .passwd("test2").build();
+        Member member1 = getMember(1);
+        Member member2 = getMember(2);
 
-        memberService.join(this.member);
         memberService.join(member1);
+        memberService.join(member2);
 
         // when
         List<Member> memberList = memberService.findAll();
@@ -122,20 +120,23 @@ class MemberServiceTest {
     @Test
     void findById() {
         // given
-        memberService.join(this.member);
+        Member member1 = getMember(1);
+        memberService.join(member1);
 
         // when
-        Member getMember = memberService.findById(this.member.getId());
+        Member getMember = memberService.findById(member1.getId());
 
         // then
-        assertThat(getMember.getId()).isEqualTo(this.member.getId());
+        assertThat(getMember.getId()).isEqualTo(member1.getId());
     }
 
     @DisplayName("존재하지 않는 아이디로 회원을 조회할 경우, IllegalStateException 을 throw")
     @Test
     void findInvalidId() {
         // given
-        memberService.join(this.member);
+        Member member1 = getMember(1);
+
+        memberService.join(member1);
 
         // when
         Throwable thrown = catchThrowable(
@@ -153,7 +154,8 @@ class MemberServiceTest {
     @Test
     void changePassword() {
         // given
-        memberService.join(this.member);
+        Member member1 = getMember(1);
+        memberService.join(member1);
 
         // when
         memberService.changePassword(this.member.getId(), "newPasswd");
@@ -166,10 +168,11 @@ class MemberServiceTest {
     @Test
     void delete() {
         // given
-        memberService.join(this.member);
+        Member member1 = getMember(1);
+        memberService.join(member1);
 
         // when
-        memberService.delete(this.member.getId());
+        memberService.delete(member1.getId());
 
         // then
         assertThat(memberService.findAll().size()).isEqualTo(0);
@@ -179,20 +182,22 @@ class MemberServiceTest {
     @Test
     void login() {
         // given
-        memberService.join(this.member);
+        Member member1 = getMember(1);
+        memberService.join(member1);
 
         // when
-        Long memberId = memberService.login(this.member.getEmail(), this.member.getPasswd());
+        Long memberId = memberService.login(member1.getEmail(), member1.getPasswd());
 
         // then
-        assertThat(memberId).isEqualTo(this.member.getId());
+        assertThat(memberId).isEqualTo(member1.getId());
     }
 
     @DisplayName("존재하지 않는 이메일로 로그인하는 경우, IllegalStateException 을 throw")
     @Test
     void loginInvalidEmail() {
         // given
-        memberService.join(this.member);
+        Member member1 = getMember(1);
+        memberService.join(member1);
 
         // when
         Throwable throwable = catchThrowable(
@@ -210,17 +215,26 @@ class MemberServiceTest {
     @Test
     void loginInvalidPassword() {
         // given
-        memberService.join(this.member);
+        Member member1 = getMember(1);
+        memberService.join(member1);
 
         // when
         Throwable throwable = catchThrowable(
                 () -> {
-                    memberService.login(this.member.getEmail(), this.member.getPasswd() + "test");
+                    memberService.login(member1.getEmail(), ErrorPasswd);
                 });
 
         // then
         assertThat(throwable)
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("비밀번호가 일치하지 않음");
+    }
+
+    private Member getMember(int number) {
+        return Member.builder()
+                .email("testEmail" + number + "@test.com")
+                .name("testName" + number)
+                .passwd("testPW" + number)
+                .build();
     }
 }

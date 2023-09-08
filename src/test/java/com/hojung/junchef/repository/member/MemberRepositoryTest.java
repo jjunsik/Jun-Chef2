@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,36 +23,28 @@ class MemberRepositoryTest {
     @Test
     void saveMember() {
         // given
-        Member member = Member.builder()
-                .name("Hwang")
-                .passwd("passwd")
-                .email("hwang@email.com")
-                .build();
+        Member member1 = getMember(1);
 
         // when
-        memberRepository.save(member);
+        memberRepository.save(member1);
 
         // then
-        Member result = memberRepository.findById(member.getId()).get();
-        assertThat(member).isEqualTo(result);
+        Member result = memberRepository.findById(member1.getId()).get();
+        assertThat(member1).isEqualTo(result);
     }
 
     @DisplayName("해당 아이디와 일치하는 회원을 조회합니다.")
     @Test
     void getMemberById() {
         // given
-        Member member = Member.builder()
-                .email("hwang@email.com")
-                .name("Hwang")
-                .passwd("passwd")
-                .build();
-        memberRepository.save(member);
+        Member member1 = getMember(1);
+        memberRepository.save(member1);
 
         // when
-        Member result = memberRepository.findById(member.getId()).get();
+        Member result = memberRepository.findById(member1.getId()).get();
 
         // then
-        assertThat(member).isEqualTo(result);
+        assertThat(member1).isEqualTo(result);
 
     }
 
@@ -61,38 +52,25 @@ class MemberRepositoryTest {
     @Test
     void getMemberByEmail() {
         // given
-        Member member = Member.builder()
-                .email("hwang@email.com")
-                .name("Hwang")
-                .passwd("passwd")
-                .build();
-        memberRepository.save(member);
+        Member member1 = getMember(1);
+        memberRepository.save(member1);
 
         // when
-        Member result = memberRepository.findByEmail(member.getEmail()).get();
+        Member result = memberRepository.findByEmail(member1.getEmail()).get();
 
         // then
-        assertThat(member).isEqualTo(result);
+        assertThat(member1).isEqualTo(result);
     }
 
     @DisplayName("전체 회원을 조회합니다.")
     @Test
     void getAllMember() {
         // given
-        Member member = Member.builder()
-                .email("hwang@email.com")
-                .name("Hwang")
-                .passwd("passwd")
-                .build();
+        Member member1 = getMember(1);
+        Member member2 = getMember(2);
 
-        Member member1 = Member.builder()
-                .email("hwang1@email.com")
-                .name("Hwang1")
-                .passwd("passwd1")
-                .build();
-
-        memberRepository.save(member);
         memberRepository.save(member1);
+        memberRepository.save(member2);
 
         // when
         List<Member> memberList = memberRepository.findAll();
@@ -105,25 +83,25 @@ class MemberRepositoryTest {
     @Test
     void deleteMember() {
         // given
-        Member member = Member.builder()
-                .email("hwang@email.com")
-                .name("Hwang")
-                .passwd("passwd")
-                .build();
-        memberRepository.save(member);
-
-        Member member1 = Member.builder()
-                .email("hwang2@email.com")
-                .name("Hwang2")
-                .passwd("passwd2")
-                .build();
+        Member member1 = getMember(1);
         memberRepository.save(member1);
 
+        Member member2 = getMember(2);
+        memberRepository.save(member2);
+
         // when
-        memberRepository.deleteById(member.getId());
+        memberRepository.deleteById(member1.getId());
 
         // then
-        assertThat(memberRepository.findById(member.getId())).isEmpty();
+        assertThat(memberRepository.findById(member1.getId())).isEmpty();
         assertThat(memberRepository.findAll().size()).isEqualTo(1);
+    }
+
+    private Member getMember(int number) {
+        return Member.builder()
+                .email("testEmail" + number + "@test.com")
+                .name("testName" + number)
+                .passwd("testPW" + number)
+                .build();
     }
 }

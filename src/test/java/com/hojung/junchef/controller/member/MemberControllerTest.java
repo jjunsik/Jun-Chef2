@@ -6,7 +6,6 @@ import com.hojung.junchef.controller.member.dto.request.LoginRequest;
 import com.hojung.junchef.controller.member.dto.request.MemberJoinRequest;
 import com.hojung.junchef.domain.member.Member;
 import com.hojung.junchef.service.member.MemberService;
-import com.hojung.junchef.util.GsonUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = MemberController.class)
 class MemberControllerTest {
-
     @MockBean
     MemberService memberService;
 
@@ -51,11 +49,6 @@ class MemberControllerTest {
                 .addFilter(new CharacterEncodingFilter("UTF-8", true))
                 .alwaysDo(print())
                 .build();
-
-        member = Member.builder()
-                .name("test1")
-                .email("test1@test.com")
-                .passwd("test1").build();
     }
 
     // jun-chef/v1/members
@@ -65,7 +58,8 @@ class MemberControllerTest {
     void getMember() throws Exception {
         // given
         // given(): Mock 객체가 특정 상황에서 해야하는 행위를 정의하는 메소드
-        given(memberService.findById(MEMBER_ID)).willReturn(this.member);
+        Member member1 = getMember(1);
+        given(memberService.findById(MEMBER_ID)).willReturn(member1);
 //        given(memberService.findById(anyLong())).willReturn(member1);
 
         // when & then
@@ -91,17 +85,11 @@ class MemberControllerTest {
     void getAllMembers() throws Exception {
         // given
 //        String ;
-        Member memberDto2 = Member.builder()
-                .name("test2")
-                .email("test2@test.com")
-                .passwd("test2").build();
+        Member member1 = getMember(1);
+        Member member2 = getMember(2);
+        Member member3 = getMember(3);
 
-        Member memberDto3 = Member.builder()
-                .name("test3")
-                .email("test3@test.com")
-                .passwd("test3").build();
-
-        given(memberService.findAll()).willReturn(List.of(this.member, memberDto2, memberDto3));
+        given(memberService.findAll()).willReturn(List.of(member1, member2, member3));
 
 //        List<Member> members = new ArrayList<>();
 //        members.add(this.memberDto);
@@ -113,9 +101,9 @@ class MemberControllerTest {
         // andExpect(content().string(containsString(""))): 리턴 받은 Body 에 ""문자열이 존재하는지 확인
         mockMvc.perform(MockMvcRequestBuilders.get("/jun-chef/v1/members"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("test1@test.com")))
-                .andExpect(content().string(containsString("test2")))
-                .andExpect(content().string(containsString("test3")));
+                .andExpect(content().string(containsString(member1.getEmail())))
+                .andExpect(content().string(containsString(member2.getEmail())))
+                .andExpect(content().string(containsString(member3.getEmail())));
 
         then(memberService).should().findAll();
     }
@@ -130,7 +118,8 @@ class MemberControllerTest {
                 .passwd("test2")
                 .build();
 
-        String content = GsonUtils.toJson(joinRequest);
+        Gson gson = new Gson();
+        String content = gson.toJson(joinRequest);
 
         given(memberService.join(any(Member.class))).willReturn(MEMBER_ID);
 //        given(memberService.join()member1).willReturn(this.memberId);
@@ -179,7 +168,8 @@ class MemberControllerTest {
     @Test
     void login() throws Exception {
         // given
-        LoginRequest loginRequest = new LoginRequest(this.member.getEmail(), this.member.getPasswd());
+        Member member1 = getMember(1);
+        LoginRequest loginRequest = new LoginRequest(member1.getEmail(), member1.getPasswd());
 
         Gson gson = new Gson();
         String content = gson.toJson(loginRequest);
@@ -189,5 +179,13 @@ class MemberControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andExpect(status().isOk());
+    }
+
+    private Member getMember(int number) {
+        return Member.builder()
+                .email("testEmail" + number + "@test.com")
+                .name("testName" + number)
+                .passwd("testPW" + number)
+                .build();
     }
 }

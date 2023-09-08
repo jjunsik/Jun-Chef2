@@ -12,29 +12,14 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
-@DataJpaTest
-@Import(MemberRepositoryImpl.class)
+@SpringBootTest
+@Transactional
 class MemberServiceTest {
-    private final MemberService memberService;
+    @Autowired
+    private MemberService memberService;
 
     @Autowired
-    public MemberServiceTest(MemberRepository memberRepository) {
-        memberService = new MemberService(memberRepository);
-    }
-
-    Member member;
-
-    @BeforeEach
-    void setUp() {
-        member = Member.builder()
-                .name("test1")
-                .email("test1@test.com")
-                .passwd("test1").build();
-    }
-
-    @AfterEach
-    void tearDown() {
-    }
+    private MemberRepository memberRepository;
 
     @DisplayName("회원 가입")
     @Test
@@ -51,6 +36,7 @@ class MemberServiceTest {
     @Test
     void joinExistEmail() {
         // given
+        String duplicateMemberErrorMsg = "중복 회원";
         Member member1 = getMember(1);
 
         Member duplicateMember = Member.builder()
@@ -72,7 +58,7 @@ class MemberServiceTest {
         // then
         assertThat(thrown)
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("중복 회원");
+                .hasMessageContaining(duplicateMemberErrorMsg);
 
         // BDD X
         // when & then
@@ -80,14 +66,14 @@ class MemberServiceTest {
         assertThatThrownBy(
                 () -> memberService.join(duplicateMember))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("중복 회원");
+                .hasMessageContaining(duplicateMemberErrorMsg);
 
         // 2. 대표적인 4가지 Exception 인 경우(NullPointer, IllegalArgument. IllegalState, IO)
 //        assertThatIllegalStateException().isThrownBy(
 //                        () -> {
-//                            memberService.join(duplicateMember);
+//                            memberService.join(duplicateErrorMsg);
 //                        })
-//                .withMessageContaining("중복 회원");
+//                .withMessageContaining(duplicateMemberErrorMsg);
 ////                .withNoCause();
 
         // 3. 대표적인 4가지 Exception 이 아닌 경우
@@ -95,7 +81,7 @@ class MemberServiceTest {
 //                .isThrownBy(() -> {
 //            memberService.join(duplicateMember);
 //        })
-//                .withMessageContaining("중복 회원");
+//                .withMessageContaining(duplicateMemberErrorMsg);
 ////                .withNoCause();
     }
 
@@ -134,34 +120,39 @@ class MemberServiceTest {
     @Test
     void findInvalidId() {
         // given
+        String nonExistMemberErrorMsg = "없는 회원";
+
         Member member1 = getMember(1);
+        Long illegalId = 99L;
 
         memberService.join(member1);
 
         // when
         Throwable thrown = catchThrowable(
                 () -> {
-                    memberService.findById(this.member.getId()+1L);
+                    memberService.findById(illegalId);
                 });
 
         // then
         assertThat(thrown)
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("없는 회원");
+                .hasMessageContaining(nonExistMemberErrorMsg);
     }
 
     @DisplayName("회원 비밀번호 변경")
     @Test
     void changePassword() {
         // given
+        String newPasswd = "newPasswd";
+
         Member member1 = getMember(1);
         memberService.join(member1);
 
         // when
-        memberService.changePassword(this.member.getId(), "newPasswd");
+        memberService.changePassword(member1.getId(), newPasswd);
 
         // then
-        assertThat(this.member.getPasswd()).isEqualTo("newPasswd");
+        assertThat(member1.getPasswd()).isEqualTo(newPasswd);
     }
 
     @DisplayName("회원 삭제")
@@ -196,25 +187,31 @@ class MemberServiceTest {
     @Test
     void loginInvalidEmail() {
         // given
+        String errorEmail = "error@error.com";
+        String nonExistEmailErrorMsg = "존재하지 않는 이메일";
+
         Member member1 = getMember(1);
         memberService.join(member1);
 
         // when
         Throwable throwable = catchThrowable(
                 () -> {
-                    memberService.login(this.member.getEmail() + "test", this.member.getPasswd());
+                    memberService.login(errorEmail, member1.getPasswd());
                 });
 
         // then
         assertThat(throwable)
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("존재하지 않는 아이디");
+                .hasMessageContaining(nonExistEmailErrorMsg);
     }
 
     @DisplayName("해당 이메일에 일치하지 않는 비밀번호로 로그인 하는 경우, IllegalStateException 을 throw")
     @Test
     void loginInvalidPassword() {
         // given
+        String ErrorPasswd = "ErrorPasswd";
+        String passwordErrorMsg = "비밀번호가 일치하지 않음";
+
         Member member1 = getMember(1);
         memberService.join(member1);
 
@@ -227,7 +224,7 @@ class MemberServiceTest {
         // then
         assertThat(throwable)
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("비밀번호가 일치하지 않음");
+                .hasMessageContaining(passwordErrorMsg);
     }
 
     private Member getMember(int number) {

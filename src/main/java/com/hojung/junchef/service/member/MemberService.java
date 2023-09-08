@@ -26,7 +26,7 @@ public class MemberService {
         return member.getId();
     }
 
-    public void validateDuplicateMember(Member member) {
+    private void validateDuplicateMember(Member member) {
         memberRepository.findByEmail(member.getEmail())
                 .ifPresent(m -> {
                     throw new IllegalStateException("중복 회원");
@@ -61,7 +61,7 @@ public class MemberService {
     public Long login(String email, String passwd) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(
-                        () -> new IllegalStateException("존재하지 않는 아이디")
+                        () -> new IllegalStateException("존재하지 않는 이메일")
                 );
 
         if (!member.getPasswd().equals(passwd)) {

@@ -11,11 +11,9 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Transactional
 @DataJpaTest
 @Import(MemberRepositoryImpl.class)
 class MemberRepositoryTest {
-
     @Autowired
     private MemberRepository memberRepository;
 
@@ -26,7 +24,7 @@ class MemberRepositoryTest {
         Member member1 = getMember(1);
 
         // when
-        memberRepository.save(member1);
+        member1 = memberRepository.save(member1);
 
         // then
         Member result = memberRepository.findById(member1.getId()).get();
@@ -38,7 +36,7 @@ class MemberRepositoryTest {
     void getMemberById() {
         // given
         Member member1 = getMember(1);
-        memberRepository.save(member1);
+        member1 = memberRepository.save(member1);
 
         // when
         Member result = memberRepository.findById(member1.getId()).get();
@@ -53,7 +51,7 @@ class MemberRepositoryTest {
     void getMemberByEmail() {
         // given
         Member member1 = getMember(1);
-        memberRepository.save(member1);
+        member1 = memberRepository.save(member1);
 
         // when
         Member result = memberRepository.findByEmail(member1.getEmail()).get();
@@ -84,7 +82,7 @@ class MemberRepositoryTest {
     void deleteMember() {
         // given
         Member member1 = getMember(1);
-        memberRepository.save(member1);
+        member1 = memberRepository.save(member1);
 
         Member member2 = getMember(2);
         memberRepository.save(member2);

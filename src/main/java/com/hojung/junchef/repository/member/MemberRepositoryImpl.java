@@ -47,11 +47,11 @@ public class MemberRepositoryImpl implements MemberRepository {
     public void deleteById(Long id) {
         Member member = em.find(Member.class, id);
         if(member != null)
-            deleteById(member);
+            deleteByMember(member);
     }
 
     @Override
-    public void deleteById(Member member) {
+    public void deleteByMember(Member member) {
         em.remove(member);
         em.flush();
         em.clear();

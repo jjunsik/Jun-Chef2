@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("jun-chef/v1/members")
@@ -23,8 +24,12 @@ public class MemberController {
     }
 
     @GetMapping
-    public List<Member> getAllMembers() {
-        return memberService.findAll();
+    public List<GetMemberResponse> getAllMembers() {
+        List<Member> members = memberService.findAll();
+
+        return members.stream()
+                .map(GetMemberResponse::new)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
@@ -61,11 +66,4 @@ public class MemberController {
 
         return new MemberResponse(memberId);
     }
-
-//    @PostMapping("/logout")
-//    public MemberResponse logout(@RequestBody LoginRequest loginRequest) {
-//        Long memberId = memberService.login(loginRequest.getEmail(), loginRequest.getPasswd());
-//
-//        return new MemberResponse(memberId);
-//    }
 }

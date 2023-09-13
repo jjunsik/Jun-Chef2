@@ -23,13 +23,13 @@ public class Member extends BaseEntity {
     private String passwd;
 
     @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = CascadeType.REFRESH)
-    private List<History> history;
+    private List<History> histories;
 
     @Builder
     public Member(String name, String email, String passwd) {
         this.name = name;
         this.email = email;
         this.passwd = passwd;
-        this.history = new ArrayList<>();
+        this.histories = new ArrayList<>();
     }
 }

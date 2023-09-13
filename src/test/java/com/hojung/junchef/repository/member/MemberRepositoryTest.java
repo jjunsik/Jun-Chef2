@@ -71,10 +71,10 @@ class MemberRepositoryTest {
         memberRepository.save(member2);
 
         // when
-        List<Member> memberList = memberRepository.findAll();
+        List<Member> members = memberRepository.findAll();
 
         // then
-        assertThat(memberList.size()).isEqualTo(2);
+        assertThat(members.size()).isEqualTo(2);
     }
 
     @DisplayName("회원을 삭제합니다.")

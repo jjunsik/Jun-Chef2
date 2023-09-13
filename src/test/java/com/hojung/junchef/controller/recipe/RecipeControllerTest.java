@@ -30,6 +30,8 @@ class RecipeControllerTest {
     @Autowired
     private WebApplicationContext wac;
 
+    static final Long TEST_MEMBER_ID = 1L;
+
     @BeforeEach
     void setUp() {
         this.mockMvc = MockMvcBuilders
@@ -47,15 +49,15 @@ class RecipeControllerTest {
                 .result("testResult")
                 .build();
 
-        given(recipeService.findByName(recipe.getRecipeName())).willReturn(recipe);
+        given(recipeService.findByName(TEST_MEMBER_ID, recipe.getRecipeName())).willReturn(recipe);
 
         // when & then
-        mockMvc.perform(MockMvcRequestBuilders.get("/jun-chef/v1/recipe")
+        mockMvc.perform(MockMvcRequestBuilders.get("/jun-chef/v1/recipe/" + TEST_MEMBER_ID)
                 .param("search", recipe.getRecipeName()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.recipeName").exists())
                 .andExpect(jsonPath("$.result").exists());
 
-        then(recipeService).should().findByName(recipe.getRecipeName());
+        then(recipeService).should().findByName(TEST_MEMBER_ID, recipe.getRecipeName());
     }
 }

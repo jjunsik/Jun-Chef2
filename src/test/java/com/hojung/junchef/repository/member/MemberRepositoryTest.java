@@ -21,7 +21,7 @@ class MemberRepositoryTest {
     @Test
     void saveMember() {
         // given
-        Member member1 = getMember(1);
+        Member member1 = createMember(1);
 
         // when
         member1 = memberRepository.save(member1);
@@ -35,7 +35,7 @@ class MemberRepositoryTest {
     @Test
     void getMemberById() {
         // given
-        Member member1 = getMember(1);
+        Member member1 = createMember(1);
         member1 = memberRepository.save(member1);
 
         // when
@@ -50,7 +50,7 @@ class MemberRepositoryTest {
     @Test
     void getMemberByEmail() {
         // given
-        Member member1 = getMember(1);
+        Member member1 = createMember(1);
         member1 = memberRepository.save(member1);
 
         // when
@@ -64,8 +64,8 @@ class MemberRepositoryTest {
     @Test
     void getAllMember() {
         // given
-        Member member1 = getMember(1);
-        Member member2 = getMember(2);
+        Member member1 = createMember(1);
+        Member member2 = createMember(2);
 
         memberRepository.save(member1);
         memberRepository.save(member2);
@@ -81,10 +81,10 @@ class MemberRepositoryTest {
     @Test
     void deleteMember() {
         // given
-        Member member1 = getMember(1);
+        Member member1 = createMember(1);
         member1 = memberRepository.save(member1);
 
-        Member member2 = getMember(2);
+        Member member2 = createMember(2);
         memberRepository.save(member2);
 
         // when
@@ -95,7 +95,7 @@ class MemberRepositoryTest {
         assertThat(memberRepository.findAll().size()).isEqualTo(1);
     }
 
-    private Member getMember(int number) {
+    private Member createMember(int number) {
         return Member.builder()
                 .email("testEmail" + number + "@test.com")
                 .name("testName" + number)

@@ -24,8 +24,10 @@ class MemberServiceTest {
     @DisplayName("회원 가입")
     @Test
     void join() {
+        // given
+        Member member1 = createMember(1);
+
         // when
-        Member member1 = getMember(1);
         Long memberId = memberService.join(member1);
 
         // then
@@ -37,7 +39,7 @@ class MemberServiceTest {
     void joinExistEmail() {
         // given
         String duplicateMemberErrorMsg = "중복 회원";
-        Member member1 = getMember(1);
+        Member member1 = createMember(1);
 
         Member duplicateMember = Member.builder()
                 .name("duplicateMember")
@@ -89,8 +91,8 @@ class MemberServiceTest {
     @Test
     void findAll() {
         // given
-        Member member1 = getMember(1);
-        Member member2 = getMember(2);
+        Member member1 = createMember(1);
+        Member member2 = createMember(2);
 
         memberService.join(member1);
         memberService.join(member2);
@@ -106,7 +108,7 @@ class MemberServiceTest {
     @Test
     void findById() {
         // given
-        Member member1 = getMember(1);
+        Member member1 = createMember(1);
         memberService.join(member1);
 
         // when
@@ -122,7 +124,7 @@ class MemberServiceTest {
         // given
         String nonExistMemberErrorMsg = "없는 회원";
 
-        Member member1 = getMember(1);
+        Member member1 = createMember(1);
         Long illegalId = 99L;
 
         memberService.join(member1);
@@ -145,7 +147,7 @@ class MemberServiceTest {
         // given
         String newPasswd = "newPasswd";
 
-        Member member1 = getMember(1);
+        Member member1 = createMember(1);
         memberService.join(member1);
 
         // when
@@ -159,7 +161,7 @@ class MemberServiceTest {
     @Test
     void delete() {
         // given
-        Member member1 = getMember(1);
+        Member member1 = createMember(1);
         memberService.join(member1);
 
         // when
@@ -173,7 +175,7 @@ class MemberServiceTest {
     @Test
     void login() {
         // given
-        Member member1 = getMember(1);
+        Member member1 = createMember(1);
         memberService.join(member1);
 
         // when
@@ -190,7 +192,7 @@ class MemberServiceTest {
         String errorEmail = "error@error.com";
         String nonExistEmailErrorMsg = "존재하지 않는 이메일";
 
-        Member member1 = getMember(1);
+        Member member1 = createMember(1);
         memberService.join(member1);
 
         // when
@@ -212,7 +214,7 @@ class MemberServiceTest {
         String ErrorPasswd = "ErrorPasswd";
         String passwordErrorMsg = "비밀번호가 일치하지 않음";
 
-        Member member1 = getMember(1);
+        Member member1 = createMember(1);
         memberService.join(member1);
 
         // when
@@ -227,7 +229,7 @@ class MemberServiceTest {
                 .hasMessageContaining(passwordErrorMsg);
     }
 
-    private Member getMember(int number) {
+    private Member createMember(int number) {
         return Member.builder()
                 .email("testEmail" + number + "@test.com")
                 .name("testName" + number)

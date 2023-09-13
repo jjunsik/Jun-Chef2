@@ -57,7 +57,7 @@ class MemberControllerTest {
     void getMember() throws Exception {
         // given
         // given(): Mock 객체가 특정 상황에서 해야하는 행위를 정의하는 메소드
-        Member member1 = getMember(1);
+        Member member1 = createMember(1);
         given(memberService.findById(MEMBER_ID)).willReturn(member1);
 //        given(memberService.findById(anyLong())).willReturn(member1);
 
@@ -84,9 +84,9 @@ class MemberControllerTest {
     void getAllMembers() throws Exception {
         // given
 //        String ;
-        Member member1 = getMember(1);
-        Member member2 = getMember(2);
-        Member member3 = getMember(3);
+        Member member1 = createMember(1);
+        Member member2 = createMember(2);
+        Member member3 = createMember(3);
 
         given(memberService.findAll()).willReturn(List.of(member1, member2, member3));
 
@@ -168,7 +168,7 @@ class MemberControllerTest {
     @Test
     void login() throws Exception {
         // given
-        Member member1 = getMember(1);
+        Member member1 = createMember(1);
         LoginRequest loginRequest = new LoginRequest(member1.getEmail(), member1.getPasswd());
 
         Gson gson = new Gson();
@@ -181,7 +181,7 @@ class MemberControllerTest {
                 .andExpect(status().isOk());
     }
 
-    private Member getMember(int number) {
+    private Member createMember(int number) {
         return Member.builder()
                 .email("testEmail" + number + "@test.com")
                 .name("testName" + number)

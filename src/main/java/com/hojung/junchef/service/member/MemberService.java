@@ -3,25 +3,18 @@ package com.hojung.junchef.service.member;
 import com.hojung.junchef.domain.member.Member;
 import com.hojung.junchef.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.hojung.junchef.service.constant.MemberServiceConstant.*;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
-
-    String duplicateMemberErrorMsg = "중복 회원";
-
-    String nonExistMemberErrorMsg = "없는 회원";
-
-    String nonExistsEmailErrorMsg = "존재하지 않는 이메일";
-
-    String passwordErrorMsg = "비밀번호가 일치하지 않음";
 
     public Long join(Member member) {
         validateDuplicateMember(member);
@@ -33,7 +26,7 @@ public class MemberService {
     private void validateDuplicateMember(Member member) {
         memberRepository.findByEmail(member.getEmail())
                 .ifPresent(m -> {
-                    throw new IllegalStateException(duplicateMemberErrorMsg);
+                    throw new IllegalStateException(DUPLICATE_MEMBER_ERROR_MESSAGE);
                 });
     }
 
@@ -44,14 +37,14 @@ public class MemberService {
     public Member findById(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(
-                        () -> new IllegalStateException(nonExistMemberErrorMsg)
+                        () -> new IllegalStateException(NON_EXIST_MEMBER_ERROR_MESSAGE)
                 );
     }
 
     public void changePassword(Long memberId, String newPassword) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(
-                        () -> new IllegalStateException(nonExistMemberErrorMsg)
+                        () -> new IllegalStateException(NON_EXIST_MEMBER_ERROR_MESSAGE)
                 );
         member.setPasswd(newPassword);
 
@@ -65,11 +58,11 @@ public class MemberService {
     public Long login(String email, String passwd) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(
-                        () -> new IllegalStateException(nonExistsEmailErrorMsg)
+                        () -> new IllegalStateException(NON_EXIST_EMAIL_ERROR_MESSAGE)
                 );
 
         if (!member.getPasswd().equals(passwd)) {
-            throw new IllegalStateException(passwordErrorMsg);
+            throw new IllegalStateException(PASSWORD_ERROR_MESSAGE);
         }
 
         return member.getId();

@@ -4,10 +4,7 @@ import com.hojung.junchef.controller.recipe.dto.response.GetRecipeResponse;
 import com.hojung.junchef.domain.recipe.Recipe;
 import com.hojung.junchef.service.recipe.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("jun-chef/v1/recipe")
@@ -19,9 +16,9 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @GetMapping
-    public GetRecipeResponse getRecipe(@RequestParam("search") String recipeName) {
-        Recipe recipe = recipeService.findByName(recipeName);
+    @GetMapping("/{memberId}")
+    public GetRecipeResponse getRecipe(@PathVariable("memberId") Long memberId, @RequestParam("search") String recipeName) {
+        Recipe recipe = recipeService.findByName(memberId, recipeName);
 
         return new GetRecipeResponse(recipe);
     }

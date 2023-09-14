@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.hojung.junchef.service.constant.RecipeServiceConstant.NON_EXIST_RECIPE_ERROR_MESSAGE;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -26,7 +28,7 @@ public class RecipeService {
     public Recipe findById(Long recipeId) {
         return recipeRepository.findById(recipeId)
                 .orElseThrow(
-                        () -> new IllegalStateException(nonExistRecipeErrorMsg)
+                        () -> new IllegalStateException(NON_EXIST_RECIPE_ERROR_MESSAGE)
                 );
     }
 

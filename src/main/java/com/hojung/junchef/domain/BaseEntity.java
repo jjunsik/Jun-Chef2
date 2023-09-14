@@ -17,4 +17,8 @@ public abstract class BaseEntity {
     protected LocalDateTime createDateTime;
     @LastModifiedDate
     protected LocalDateTime lastModifiedDateTime;
+
+    public void setLastModifiedDateTime(LocalDateTime lastModifiedDateTime) {
+        this.lastModifiedDateTime = lastModifiedDateTime;
+    }
 }

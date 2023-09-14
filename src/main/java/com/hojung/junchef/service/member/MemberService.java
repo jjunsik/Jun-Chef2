@@ -47,8 +47,6 @@ public class MemberService {
                         () -> new IllegalStateException(NON_EXIST_MEMBER_ERROR_MESSAGE)
                 );
         member.setPasswd(newPassword);
-
-        memberRepository.save(member);
     }
 
     public void delete(Long memberId) {

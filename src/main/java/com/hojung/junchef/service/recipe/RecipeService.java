@@ -1,7 +1,11 @@
 package com.hojung.junchef.service.recipe;
 
+import com.hojung.junchef.domain.history.History;
+import com.hojung.junchef.domain.member.Member;
 import com.hojung.junchef.domain.recipe.Recipe;
 import com.hojung.junchef.repository.recipe.RecipeRepository;
+import com.hojung.junchef.service.history.HistoryService;
+import com.hojung.junchef.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

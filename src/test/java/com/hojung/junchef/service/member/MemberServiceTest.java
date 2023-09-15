@@ -98,10 +98,10 @@ class MemberServiceTest {
         memberService.join(member2);
 
         // when
-        List<Member> memberList = memberService.findAll();
+        List<Member> members = memberService.findAll();
 
         // then
-        assertThat(memberList.size()).isEqualTo(2);
+        assertThat(members.size()).isEqualTo(2);
     }
 
     @DisplayName("아이디로 회원 조회")
@@ -211,7 +211,7 @@ class MemberServiceTest {
     @Test
     void loginInvalidPassword() {
         // given
-        String ErrorPasswd = "ErrorPasswd";
+        String errorPasswd = "ErrorPasswd";
         String passwordErrorMsg = "비밀번호가 일치하지 않음";
 
         Member member1 = createMember(1);
@@ -220,7 +220,7 @@ class MemberServiceTest {
         // when
         Throwable throwable = catchThrowable(
                 () -> {
-                    memberService.login(member1.getEmail(), ErrorPasswd);
+                    memberService.login(member1.getEmail(), errorPasswd);
                 });
 
         // then

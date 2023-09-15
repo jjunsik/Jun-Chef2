@@ -46,6 +46,7 @@ public class MemberService {
                 .orElseThrow(
                         () -> new IllegalStateException(NON_EXIST_MEMBER_ERROR_MESSAGE)
                 );
+
         member.setPasswd(newPassword);
     }
 

@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface HistoryRepository {
     History save(History history);
     Optional<History> findById(Long id);
-    List<History> findAll();
+    List<History> findAllByMemberId(Long memberId);
     void deleteById(Long id);
-    void deleteById(History history);
+    void deleteByHistory(History history);
 }

@@ -18,11 +18,13 @@ public class Recipe extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String recipeName;
-    private String result;
+    private String ingredients;
+    private String cookingOrder;
 
     @Builder
-    public Recipe(String recipeName, String result) {
+    public Recipe(String recipeName, String ingredients, String cookingOrder) {
         this.recipeName = recipeName;
-        this.result = result;
+        this.ingredients = ingredients;
+        this.cookingOrder = cookingOrder;
     }
 }

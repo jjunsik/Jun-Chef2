@@ -27,6 +27,13 @@ public class HistoryController {
         return new HistoryResponse(historyId);
     }
 
+    @GetMapping
+    public HistoryResponse getHistoryId(@RequestParam("recipeName") String recipeName) {
+        History history = historyService.findByRecipeName(recipeName);
+
+        return new HistoryResponse(history.getId());
+    }
+
     // 일단 안 씀
     @GetMapping("/{memberId}")
     public List<GetHistoryResponse> getHistories(@PathVariable("memberId") Long memberId) {

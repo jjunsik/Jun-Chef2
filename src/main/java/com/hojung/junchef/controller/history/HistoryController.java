@@ -30,9 +30,9 @@ public class HistoryController {
     // 일단 안 씀
     @GetMapping("/{memberId}")
     public List<GetHistoryResponse> getHistories(@PathVariable("memberId") Long memberId) {
-        List<History> historyList = historyService.findAllByMemberId(memberId);
+        List<History> getHistories = historyService.findAllByMemberId(memberId);
 
-        return historyList.stream()
+        return getHistories.stream()
                 .map(GetHistoryResponse::of)
                 .collect(Collectors.toList());
     }

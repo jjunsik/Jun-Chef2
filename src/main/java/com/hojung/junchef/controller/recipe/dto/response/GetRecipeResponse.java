@@ -6,10 +6,12 @@ import lombok.Data;
 @Data
 public class GetRecipeResponse {
     private final String recipeName;
-    private final String result;
+    private final String ingredients;
+    private final String cookingOrder;
 
     public GetRecipeResponse(Recipe recipe) {
         this.recipeName = recipe.getRecipeName();
-        this.result = recipe.getResult();
+        this.ingredients = recipe.getIngredients();
+        this.cookingOrder = recipe.getCookingOrder();
     }
 }

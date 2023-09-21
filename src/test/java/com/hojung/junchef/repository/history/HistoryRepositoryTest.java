@@ -40,7 +40,8 @@ class HistoryRepositoryTest {
 
         Recipe recipe = Recipe.builder()
                 .recipeName("testRecipe")
-                .result("recipeContent")
+                .ingredients("testIngredients")
+                .cookingOrder("testCookingOrder")
                 .build();
 
         History history = new History(member, recipe);
@@ -67,12 +68,14 @@ class HistoryRepositoryTest {
 
         Recipe recipe1 = Recipe.builder()
                 .recipeName("recipe1")
-                .result("recipeContent1")
+                .ingredients("testIngredients1")
+                .cookingOrder("testCookingOrder1")
                 .build();
 
         Recipe recipe2 = Recipe.builder()
                 .recipeName("recipe2")
-                .result("recipeContent2")
+                .ingredients("testIngredients2")
+                .cookingOrder("testCookingOrder2")
                 .build();
 
         member = memberRepository.save(member);
@@ -107,7 +110,8 @@ class HistoryRepositoryTest {
 
         Recipe recipe1 = Recipe.builder()
                 .recipeName("recipe1")
-                .result("recipeContent1")
+                .ingredients("ingredients1")
+                .cookingOrder("cookingOrder1")
                 .build();
         recipe1 = recipeRepository.save(recipe1);
 

@@ -46,7 +46,8 @@ class RecipeControllerTest {
         // given
         Recipe recipe = Recipe.builder()
                 .recipeName("testRecipeName")
-                .result("testResult")
+                .ingredients("testIngredients")
+                .cookingOrder("testCookingOrder")
                 .build();
 
         given(recipeService.findByName(TEST_MEMBER_ID, recipe.getRecipeName())).willReturn(recipe);

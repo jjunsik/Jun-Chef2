@@ -60,7 +60,8 @@ class RecipeRepositoryTest {
     private Recipe createRecipe(int number) {
         return Recipe.builder()
                 .recipeName("testRecipeName" + number)
-                .result("testResult" + number)
+                .ingredients("testIngredients" + number)
+                .cookingOrder("testCookingOrder" + number)
                 .build();
     }
 }

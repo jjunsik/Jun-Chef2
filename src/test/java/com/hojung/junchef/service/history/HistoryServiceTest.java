@@ -162,7 +162,8 @@ class HistoryServiceTest {
     private Recipe createRecipe(int recipeNumber) {
         return Recipe.builder()
                 .recipeName("testRecipeName" + recipeNumber)
-                .result("testResult" + recipeNumber)
+                .ingredients("testIngredients" + recipeNumber)
+                .cookingOrder("testCookingOrder" + recipeNumber)
                 .build();
     }
 

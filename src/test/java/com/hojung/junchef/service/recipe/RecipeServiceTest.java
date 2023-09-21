@@ -110,7 +110,8 @@ class RecipeServiceTest {
 
         Recipe recipe1 = Recipe.builder()
                 .recipeName("Test RecipeName")
-                .result("testResult")
+                .ingredients("testIngredients")
+                .cookingOrder("testCookingOrder")
                 .build();
 
         // when
@@ -144,7 +145,8 @@ class RecipeServiceTest {
     private Recipe createRecipe(int number) {
         return Recipe.builder()
                 .recipeName("testRecipeName" + number)
-                .result("testResult" + number)
+                .ingredients("testIngredients" + number)
+                .cookingOrder("testCookingOrder" + number)
                 .build();
     }
 

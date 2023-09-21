@@ -14,6 +14,7 @@ import java.util.Optional;
 
 import static com.hojung.junchef.service.constant.HistoryServiceConstant.DELETE_MEMBER_HISTORY_INDEX;
 import static com.hojung.junchef.service.constant.HistoryServiceConstant.HISTORY_MAX_SIZE;
+import static com.hojung.junchef.service.constant.RecipeServiceConstant.NON_EXIST_RECIPE_ERROR_MESSAGE;
 
 @Service
 @Transactional
@@ -70,5 +71,13 @@ public class HistoryService {
         histories.sort(Comparator.comparing(History::getLastModifiedDateTime).reversed());
 
         return histories;
+    }
+
+    public History findByRecipeName(String recipeName) {
+        recipeName = recipeName.replaceAll("\\s+", "");
+
+        return historyRepository.findByName(recipeName).orElseThrow(
+                () -> new IllegalStateException(NON_EXIST_RECIPE_ERROR_MESSAGE)
+        );
     }
 }

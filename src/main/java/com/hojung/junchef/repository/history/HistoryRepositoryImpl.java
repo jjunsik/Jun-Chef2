@@ -30,6 +30,15 @@ public class HistoryRepositoryImpl implements HistoryRepository {
     }
 
     @Override
+    public Optional<History> findByName(String name) {
+        List<History> result = em.createQuery("select h from History h where h.recipe.recipeName = :recipeName", History.class)
+                .setParameter("recipeName", name)
+                .getResultList();
+
+        return result.stream().findAny();
+    }
+
+    @Override
     public List<History> findAllByMemberId(Long memberId) {
         return em.createQuery("select h from History h where h.member.id = :member_id", History.class)
                 .setParameter("member_id", memberId)

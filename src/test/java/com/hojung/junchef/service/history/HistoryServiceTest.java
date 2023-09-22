@@ -147,6 +147,26 @@ class HistoryServiceTest {
         assertThat(result).isEqualTo(false);
     }
 
+    @DisplayName("레시피 이름으로 검색하여 History 객체 반환")
+    @Test
+    void getHistoryByRecipeName() {
+        // given
+        Member member1 = createMember(1);
+        Long memberId = memberService.join(member1);
+
+        Recipe recipe1 = createRecipe(1);
+        String recipeName = recipe1.getRecipeName();
+
+        recipeService.findByName(memberId, recipeName);
+
+        // when
+        History getHistoryByMemberIdAndRecipeName = historyService.findByMemberIdAndRecipeName(memberId, recipeName);
+
+        // then
+        assertThat(getHistoryByMemberIdAndRecipeName.getMember().getId()).isEqualTo(memberId);
+        assertThat(getHistoryByMemberIdAndRecipeName.getRecipe().getRecipeName()).isEqualTo(recipeName);
+    }
+
     private History createHistory(int memberNumber, int recipeNumber) {
         return new History(createMember(memberNumber), createRecipe(recipeNumber));
     }

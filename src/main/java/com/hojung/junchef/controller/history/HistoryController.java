@@ -27,14 +27,13 @@ public class HistoryController {
         return new HistoryResponse(historyId);
     }
 
-    @GetMapping
-    public HistoryResponse getHistoryId(@RequestParam("recipeName") String recipeName) {
-        History history = historyService.findByRecipeName(recipeName);
+    @GetMapping("/member/{memberId}")
+    public HistoryResponse getHistoryId(@PathVariable("memberId") Long memberId, @RequestParam("recipeName") String recipeName) {
+        History history = historyService.findByMemberIdAndRecipeName(memberId, recipeName);
 
         return new HistoryResponse(history.getId());
     }
 
-    // 일단 안 씀
     @GetMapping("/{memberId}")
     public List<GetHistoryResponse> getHistories(@PathVariable("memberId") Long memberId) {
         List<History> getHistories = historyService.findAllByMemberId(memberId);

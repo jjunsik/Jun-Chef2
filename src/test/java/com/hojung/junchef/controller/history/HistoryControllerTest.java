@@ -79,6 +79,23 @@ class HistoryControllerTest {
                         .andExpect(status().isOk());
     }
 
+    @DisplayName("레시피 이름으로 History 객체의 ID 값 반환")
+    @Test
+    void getHistoryIdByRecipeName() throws Exception{
+        // given
+        History history = createHistory(1, 1);
+        String recipeName = history.getRecipe().getRecipeName();
+
+        given(historyService.findByMemberIdAndRecipeName(TEST_MEMBER_ID, recipeName)).willReturn(history);
+
+        // when & then
+        mockMvc.perform(MockMvcRequestBuilders.get(BASE_HISTORY_URL + "/member/" + TEST_MEMBER_ID)
+                        .param("recipeName", recipeName))
+                        .andExpect(status().isOk());
+
+        then(historyService).should().findByMemberIdAndRecipeName(TEST_MEMBER_ID, recipeName);
+    }
+
     private History createHistory(int memberNumber, int recipeNumber) {
         return new History(createMember(memberNumber), createRecipe(recipeNumber));
     }

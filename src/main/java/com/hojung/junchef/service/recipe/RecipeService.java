@@ -33,8 +33,7 @@ public class RecipeService {
                 );
 
         // 사용자는 항상 공백이 제거된 음식의 이름이 최근 검색어 목록으로 저장이 됨.
-        History history = new History(member, recipe);
-        historyService.save(history);
+        saveHistory(member, recipe);
 
         return recipe;
     }
@@ -48,10 +47,14 @@ public class RecipeService {
                         () -> new IllegalStateException(NON_EXIST_RECIPE_ERROR_MESSAGE)
                 );
 
-        History history = new History(member, recipe);
-        historyService.save(history);
+        saveHistory(member, recipe);
 
         return recipe;
+    }
+
+    private void saveHistory(Member member, Recipe recipe) {
+        History history = new History(member, recipe);
+        historyService.save(history);
     }
 
     private Recipe getRecipeFromChatGPT(String recipeName) {
@@ -60,7 +63,8 @@ public class RecipeService {
         // RecipeRepository 에 Recipe 를 저장할 때, 무조건 음식 이름의 공백을 모두 제거하고 저장하기 위해 replaceAll 을 사용
         Recipe recipe = Recipe.builder()
                 .recipeName(recipeName.replaceAll("\\s+", ""))
-                .result(result)
+                .ingredients(result + "의 재료")
+                .cookingOrder(result + "의 만드는 방법")
                 .build();
 
         return recipeRepository.save(recipe);

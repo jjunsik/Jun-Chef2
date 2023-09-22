@@ -65,7 +65,6 @@ public class HistoryService {
         historyRepository.deleteById(historyId);
     }
 
-    // 일단 안 씀
     public List<History> findAllByMemberId(Long memberId) {
         List<History> histories = historyRepository.findAllByMemberId(memberId);
         histories.sort(Comparator.comparing(History::getLastModifiedDateTime).reversed());
@@ -73,10 +72,10 @@ public class HistoryService {
         return histories;
     }
 
-    public History findByRecipeName(String recipeName) {
+    public History findByMemberIdAndRecipeName(Long memberId, String recipeName) {
         recipeName = recipeName.replaceAll("\\s+", "");
 
-        return historyRepository.findByName(recipeName).orElseThrow(
+        return historyRepository.findByMemberIdAndRecipeName(memberId, recipeName).orElseThrow(
                 () -> new IllegalStateException(NON_EXIST_RECIPE_ERROR_MESSAGE)
         );
     }

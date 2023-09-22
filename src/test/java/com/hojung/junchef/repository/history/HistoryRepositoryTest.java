@@ -125,4 +125,33 @@ class HistoryRepositoryTest {
         Optional<History> validateHistory = historyRepository.findById(history1.getId());
         assertThat(validateHistory).isEmpty();
     }
+
+    @DisplayName("멤버 아이디와 레시피 이름으로 History 객체를 조회")
+    @Test
+    void findByMemberIdAndRecipeName() {
+        // given
+        Member member1 = Member.builder()
+                .name("test1")
+                .email("test1@test.com")
+                .passwd("testPasswd1")
+                .build();
+        member1 = memberRepository.save(member1);
+        Long memberId = member1.getId();
+
+        Recipe recipe1 = Recipe.builder()
+                .recipeName("recipe1")
+                .ingredients("ingredients1")
+                .cookingOrder("cookingOrder1")
+                .build();
+        recipe1 = recipeRepository.save(recipe1);
+
+        History history1 = new History(member1, recipe1);
+        history1 = historyRepository.save(history1);
+
+        // when
+        History history = historyRepository.findByMemberIdAndRecipeName(memberId, recipe1.getRecipeName()).get();
+
+        // then
+        assertThat(history).isEqualTo(history1);
+    }
 }

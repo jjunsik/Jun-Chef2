@@ -66,4 +66,13 @@ public class MemberService {
 
         return member.getId();
     }
+
+    public Long logout(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(
+                        () -> new IllegalStateException(NON_EXIST_MEMBER_ERROR_MESSAGE)
+                );
+
+        return member.getId();
+    }
 }

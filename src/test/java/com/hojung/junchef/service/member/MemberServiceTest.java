@@ -229,6 +229,20 @@ class MemberServiceTest {
                 .hasMessageContaining(passwordErrorMsg);
     }
 
+    @DisplayName("로그아웃")
+    @Test
+    void logout() {
+        // given
+        Member member1 = createMember(1);
+        Long memberId = memberService.join(member1);
+
+        // when
+        Long logoutMemberId = memberService.logout(memberId);
+
+        // then
+        assertThat(logoutMemberId).isEqualTo(memberId);
+    }
+
     private Member createMember(int number) {
         return Member.builder()
                 .email("testEmail" + number + "@test.com")

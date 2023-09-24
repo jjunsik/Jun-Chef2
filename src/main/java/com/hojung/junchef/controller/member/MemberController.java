@@ -66,4 +66,12 @@ public class MemberController {
 
         return new MemberResponse(memberId);
     }
+
+    @GetMapping("/logout/{memberId}")
+    public MemberResponse logout(@PathVariable("memberId") Long memberId) {
+        Long logoutMemberId = memberService.logout(memberId);
+
+        return new MemberResponse(logoutMemberId);
+    }
+
 }

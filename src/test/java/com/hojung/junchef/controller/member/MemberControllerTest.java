@@ -3,6 +3,7 @@ package com.hojung.junchef.controller.member;
 import com.google.gson.Gson;
 import com.hojung.junchef.controller.member.dto.request.ChangePasswordRequest;
 import com.hojung.junchef.controller.member.dto.request.LoginRequest;
+import com.hojung.junchef.controller.member.dto.request.LogoutRequest;
 import com.hojung.junchef.controller.member.dto.request.MemberJoinRequest;
 import com.hojung.junchef.domain.member.Member;
 import com.hojung.junchef.service.member.MemberService;
@@ -178,6 +179,25 @@ class MemberControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post(BASE_MEMBER_URL + "/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("로그아웃")
+    @Test
+    void logout() throws Exception {
+        // given
+        Member member1 = createMember(1);
+        Long memberId = member1.getId();
+
+        LogoutRequest logoutRequest = new LogoutRequest(memberId);
+
+        Gson gson = new Gson();
+        String content = gson.toJson(logoutRequest);
+
+        // when & then
+        mockMvc.perform(MockMvcRequestBuilders.get(BASE_MEMBER_URL + "/logout")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content))
                 .andExpect(status().isOk());
     }
 

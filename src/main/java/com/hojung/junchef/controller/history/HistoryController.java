@@ -27,8 +27,8 @@ public class HistoryController {
         return new HistoryResponse(historyId);
     }
 
-    @GetMapping("/member/{memberId}")
-    public HistoryResponse getHistoryId(@PathVariable("memberId") Long memberId, @RequestParam("recipeName") String recipeName) {
+    @GetMapping("/{memberId}/{recipeName}")
+    public HistoryResponse getHistoryId(@PathVariable("memberId") Long memberId, @PathVariable("recipeName") String recipeName) {
         History history = historyService.findByMemberIdAndRecipeName(memberId, recipeName);
 
         return new HistoryResponse(history.getId());

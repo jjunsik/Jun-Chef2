@@ -4,7 +4,6 @@ import com.hojung.junchef.domain.history.History;
 import com.hojung.junchef.domain.member.Member;
 import com.hojung.junchef.domain.recipe.Recipe;
 import com.hojung.junchef.repository.history.HistoryRepository;
-
 import com.hojung.junchef.service.member.MemberService;
 import com.hojung.junchef.service.recipe.RecipeService;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional

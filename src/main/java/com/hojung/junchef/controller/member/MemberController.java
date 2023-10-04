@@ -32,8 +32,8 @@ public class MemberController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/{id}")
-    public GetMemberResponse getMember(@PathVariable("id") Long memberId) {
+    @GetMapping("/{memberId}")
+    public GetMemberResponse getMember(@PathVariable("memberId") Long memberId) {
         Member member = memberService.findById(memberId);
 
         return new GetMemberResponse(member);
@@ -46,15 +46,15 @@ public class MemberController {
         return new MemberResponse(memberId);
     }
 
-    @PutMapping("/{id}")
-    public MemberResponse changePassword(@PathVariable("id") Long memberId, @RequestBody ChangePasswordRequest changePasswordRequest) {
+    @PutMapping("/{memberId}")
+    public MemberResponse changePassword(@PathVariable("memberId") Long memberId, @RequestBody ChangePasswordRequest changePasswordRequest) {
         memberService.changePassword(memberId, changePasswordRequest.getNewPasswd());
 
         return new MemberResponse(memberId);
     }
 
-    @DeleteMapping("/{id}")
-    public MemberResponse delete(@PathVariable("id") Long memberId) {
+    @DeleteMapping("/{memberId}")
+    public MemberResponse delete(@PathVariable("memberId") Long memberId) {
         memberService.delete(memberId);
 
         return new MemberResponse(memberId);

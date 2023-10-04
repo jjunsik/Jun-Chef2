@@ -2,18 +2,15 @@ package com.hojung.junchef.repository.history;
 
 import com.hojung.junchef.domain.history.History;
 import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-
+@RequiredArgsConstructor
 @Repository
 public class HistoryRepositoryImpl implements HistoryRepository {
     private final EntityManager em;
-
-    public HistoryRepositoryImpl(EntityManager em) {
-        this.em = em;
-    }
 
     @Override
     public History save(History history) {

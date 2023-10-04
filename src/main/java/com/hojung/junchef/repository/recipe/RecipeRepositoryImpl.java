@@ -2,18 +2,16 @@ package com.hojung.junchef.repository.recipe;
 
 import com.hojung.junchef.domain.recipe.Recipe;
 import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Repository
 public class RecipeRepositoryImpl implements RecipeRepository {
     private final EntityManager em;
-
-    public RecipeRepositoryImpl(EntityManager em) {
-        this.em = em;
-    }
 
     @Override
     public Recipe save(Recipe recipe) {

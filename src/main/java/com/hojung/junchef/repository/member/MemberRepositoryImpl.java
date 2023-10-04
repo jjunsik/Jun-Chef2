@@ -2,18 +2,16 @@ package com.hojung.junchef.repository.member;
 
 import com.hojung.junchef.domain.member.Member;
 import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Repository
 public class MemberRepositoryImpl implements MemberRepository {
     private final EntityManager em;
-
-    public MemberRepositoryImpl(EntityManager em) {
-        this.em = em;
-    }
 
     @Override
     public Member save(Member member) {
@@ -46,6 +44,7 @@ public class MemberRepositoryImpl implements MemberRepository {
     @Override
     public void deleteById(Long id) {
         Member member = em.find(Member.class, id);
+
         if(member != null)
             deleteByMember(member);
     }

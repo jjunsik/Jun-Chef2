@@ -2,13 +2,14 @@ package com.hojung.junchef.service.member;
 
 import com.hojung.junchef.domain.member.Member;
 import com.hojung.junchef.repository.member.MemberRepository;
+import com.hojung.junchef.util.error.exception.JunChefException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.hojung.junchef.service.constant.MemberServiceConstant.*;
+import static com.hojung.junchef.util.error.exception.JunChefExceptionContent.*;
 
 @Service
 @Transactional
@@ -26,7 +27,7 @@ public class MemberService {
     private void validateDuplicateMember(Member member) {
         memberRepository.findByEmail(member.getEmail())
                 .ifPresent(m -> {
-                    throw new IllegalStateException(DUPLICATE_MEMBER_ERROR_MESSAGE);
+                    throw new JunChefException(DUPLICATE_MEMBER_ERROR);
                 });
     }
 
@@ -37,14 +38,14 @@ public class MemberService {
     public Member findById(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(
-                        () -> new IllegalStateException(NON_EXIST_MEMBER_ERROR_MESSAGE)
+                        () -> new JunChefException(NON_EXIST_MEMBER_ERROR)
                 );
     }
 
     public void changePassword(Long memberId, String newPassword) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(
-                        () -> new IllegalStateException(NON_EXIST_MEMBER_ERROR_MESSAGE)
+                        () -> new JunChefException(NON_EXIST_MEMBER_ERROR)
                 );
 
         member.setPasswd(newPassword);
@@ -57,11 +58,11 @@ public class MemberService {
     public Long login(String email, String passwd) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(
-                        () -> new IllegalStateException(NON_EXIST_EMAIL_ERROR_MESSAGE)
+                        () -> new JunChefException(NON_EXIST_MEMBER_EMAIL_ERROR)
                 );
 
         if (!member.getPasswd().equals(passwd)) {
-            throw new IllegalStateException(PASSWORD_ERROR_MESSAGE);
+            throw new JunChefException(MEMBER_PASSWORD_ERROR);
         }
 
         return member.getId();
@@ -70,7 +71,7 @@ public class MemberService {
     public Long logout(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(
-                        () -> new IllegalStateException(NON_EXIST_MEMBER_ERROR_MESSAGE)
+                        () -> new JunChefException(NON_EXIST_MEMBER_ERROR)
                 );
 
         return member.getId();

@@ -2,6 +2,7 @@ package com.hojung.junchef.service.history;
 
 import com.hojung.junchef.domain.history.History;
 import com.hojung.junchef.repository.history.HistoryRepository;
+import com.hojung.junchef.util.error.exception.JunChefException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ import java.util.Optional;
 
 import static com.hojung.junchef.service.constant.HistoryServiceConstant.DELETE_MEMBER_HISTORY_INDEX;
 import static com.hojung.junchef.service.constant.HistoryServiceConstant.HISTORY_MAX_SIZE;
-import static com.hojung.junchef.service.constant.RecipeServiceConstant.NON_EXIST_RECIPE_ERROR_MESSAGE;
+import static com.hojung.junchef.util.error.exception.JunChefExceptionContent.NON_EXIST_RECIPE_ERROR;
 
 @Service
 @Transactional
@@ -76,7 +77,7 @@ public class HistoryService {
         recipeName = recipeName.replaceAll("\\s+", "");
 
         return historyRepository.findByMemberIdAndRecipeName(memberId, recipeName).orElseThrow(
-                () -> new IllegalStateException(NON_EXIST_RECIPE_ERROR_MESSAGE)
+                () -> new JunChefException(NON_EXIST_RECIPE_ERROR)
         );
     }
 }

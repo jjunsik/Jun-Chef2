@@ -6,11 +6,12 @@ import com.hojung.junchef.domain.recipe.Recipe;
 import com.hojung.junchef.repository.recipe.RecipeRepository;
 import com.hojung.junchef.service.history.HistoryService;
 import com.hojung.junchef.service.member.MemberService;
+import com.hojung.junchef.util.error.exception.JunChefException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.hojung.junchef.service.constant.RecipeServiceConstant.NON_EXIST_RECIPE_ERROR_MESSAGE;
+import static com.hojung.junchef.util.error.exception.JunChefExceptionContent.NON_EXIST_RECIPE_ERROR;
 
 @Service
 @Transactional
@@ -44,7 +45,7 @@ public class RecipeService {
 
         Recipe recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(
-                        () -> new IllegalStateException(NON_EXIST_RECIPE_ERROR_MESSAGE)
+                        () -> new JunChefException(NON_EXIST_RECIPE_ERROR)
                 );
 
         saveHistory(member, recipe);
@@ -58,14 +59,7 @@ public class RecipeService {
     }
 
     private Recipe getRecipeFromChatGPT(String recipeName) {
-        String result = recipeGptService.search(recipeName);
-
-        // RecipeRepository 에 Recipe 를 저장할 때, 무조건 음식 이름의 공백을 모두 제거하고 저장하기 위해 replaceAll 을 사용
-        Recipe recipe = Recipe.builder()
-                .recipeName(recipeName.replaceAll("\\s+", ""))
-                .ingredients(result + "의 재료")
-                .cookingOrder(result + "의 만드는 방법")
-                .build();
+        Recipe recipe = recipeGptService.search(recipeName);
 
         return recipeRepository.save(recipe);
     }

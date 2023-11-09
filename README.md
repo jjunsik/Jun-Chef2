@@ -3,8 +3,7 @@
 
 
 ## 🔍 소개
-
-
+준쉐프 Ver. 1의 문제점인 검색 속도를 개선하기 위해 진행한 프로젝트입니다.
 
 ---
 
@@ -12,9 +11,9 @@
 
 **Language |** Java
 
-**Framework |** Spring Boot
+**Framework |** Spring Boot, Spring MVC
 
-**Build Tool |** Gradle
+**Build |** Gradle
 
 **Database |** MySQL, H2
 
@@ -24,15 +23,19 @@
 
 **Test |** JUnit5, Mockito, H2
 
+**Tools |** Android Studio, IntelliJ
+
+**Library |** ChatGPT
+
 ---
 
 ## ⛓️ ERD
 
-<img width="1086" height="760" alt="image" src="C:\Users\jjun\Desktop\JunChef2\JunChef-ERD.png">
+![JunChef-ERD](https://github.com/jjunsik/Jun-Chef2/assets/93212863/17d1d4a1-73bc-4dfa-bb43-be2b5f0824f5)
 
 ---
 
 ## ⚙️ Architecture
 
-<img width="1086" alt="image" src="C:\Users\jjun\Desktop\JunChef2\Architecture.png">
+![Architecture](https://github.com/jjunsik/Jun-Chef2/assets/93212863/0e63983c-da3d-49e7-b374-cb6afe642432)
 
